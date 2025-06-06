@@ -9,14 +9,8 @@
 # STANDARD MODULES IMPORT
 import sys, os, subprocess, threading, gettext, locale, json
 
-#-----------------------------------------------------------------------------------------------------
-
-# DEFINING TRANSLATE FILES PATH
-locale_path = os.path.join("/usr/share/davinci-helper/locale")
-
-# DEFINING SETTINGS FILES PATH
-home_dir = os.path.expanduser("~")
-settings_path = os.path.join(f"{home_dir}/.config")
+# NOT STANDARD MODULES IMPORT
+from ..logic.data_path import *
 
 #-----------------------------------------------------------------------------------------------------
 

@@ -18,14 +18,8 @@ import sys, os, subprocess, threading, gettext, locale, re
 
 # NOT STANDARD MODULES IMPORT
 from davinci_helper.functions.logic.utility import *
-
-#-----------------------------------------------------------------------------------------------------
-
-# DEFINING TRANSLATE FILES PATH
-locale_path = os.path.join("/usr/share/davinci-helper/locale") 
-
-# DEFINING THE SUPPORTED GPU LIST FILE 
-gpu_database_path = os.path.join("//usr/share/davinci-helper/data/gpu_support")
+from data_path import *
+from davinci_helper.package_manager import package_manager, AptManager
 
 #-----------------------------------------------------------------------------------------------------
 
@@ -47,8 +41,11 @@ _ = gettext.gettext
 
 # FUNCTION THAT STARTS THE NVIDIA DRIVER INSTALLATION
 def install_nvidia_driver():
+    # If this is Debian-like, call the APT version and return.
+    if install_nvidia_driver_deb():
+        return
 
-    #-----------------------------------------------------------------------------------------------------
+    # ----- Fedora path continues below ------------------------------------------------------------------
 
     # ACQUIRING IF IS ALREADY INSTALLED THE PROPRIETARY NVIDIA DRIVER
     nvidia_driver_check = subprocess.run("dnf list --installed | grep akmod-nvidia ; dnf list --installed | grep xorg-x11-drv-nvidia-cuda", shell=True, capture_output=True, text=True ).stdout
@@ -91,6 +88,27 @@ def install_nvidia_driver():
 
 
 
+# --- Ubuntu / Debian -------------------------------------------------
+def install_nvidia_driver_deb():
+    if not isinstance(package_manager, AptManager):     # we are on Fedora
+        return False                                    # exit and let Fedora code run
+
+    # Ubuntu packages: meta package chooses the right version (535/550...)
+    packages = ["nvidia-driver", "nvidia-utils"]
+
+    present = package_manager.list_installed_libs().stdout
+    if all(pkg in present for pkg in packages):
+        print(_("The proprietary Nvidia GPU driver was already installed."))
+        return True
+
+    result = package_manager.install(packages)
+    if result.returncode != 0:
+        print(_("DEBUG : Could not install Nvidia driver via APT."))
+        print(result.stdout, "\n")
+        exit(3)
+
+    print(_("Nvidia driver successfully installed."))
+    return True
 
 
 # FUNCTION THAT STARTS THE AMD GPU DRIVER INSTALLATION

@@ -16,12 +16,7 @@ from ..gui.settings_management_dialog_gui import setting_management_dialog_class
 
 # NOT STANDARD MODULES IMPORT
 from . import app_info
-
-#-----------------------------------------------------------------------------------------------------
-
-# DEFINING TRANSLATE FILES PATH
-locale_path = os.path.join("/usr/share/davinci-helper/locale")
-
+from ..logic.data_path import *
 #-----------------------------------------------------------------------------------------------------
 
 # ASSOCIATE THE NAME OF TRANSLATION DICTIONARY TO THIS FILE PATH FOR THE LOCALE MODULE

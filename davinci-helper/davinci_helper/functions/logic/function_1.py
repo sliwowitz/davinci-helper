@@ -17,12 +17,8 @@ import sys, os, subprocess, threading, gettext, locale
 
 # NOT STANDARD MODULES IMPORT
 import davinci_helper.functions.logic.utility as utility
-
-
-#-----------------------------------------------------------------------------------------------------
-
-# DEFINING TRANSLATE FILES PATH
-locale_path = os.path.join("/usr/share/davinci-helper/locale")
+from davinci_helper.package_manager import package_manager
+from .data_path import *
 
 #-----------------------------------------------------------------------------------------------------
 
@@ -48,7 +44,7 @@ def get_libraries_list ():
     #-----------------------------------------------------------------------------------------------------
 
     # READING INSTALLED LIBRARY LIST
-    library_list = subprocess.run("dnf list --installed | grep lib", shell=True, capture_output=True, text=True)
+    library_list = package_manager.list_installed_libs()
 
     # PRINTING IN THE TERMINAL THE RESULT DEPENDING ON WHETHER THERE ARE ERRORS OR NOT
     if library_list.returncode == 0: 
@@ -183,6 +179,32 @@ def check_dependencies_41 (library_list_output):
 
 
 
+def check_dependencies_deb(library_list_output: str):
+    """Ubuntu 24.04"""
+    required = [
+        "libcurl4",
+        "libglu1-mesa",
+        "libfuse2",
+        "libxcrypt-compat",
+    ]
+    missing = [pkg for pkg in required if pkg not in library_list_output]
+    if not missing:
+        print(_("There are no missing libraries to install, you can now install DaVinci Resolve"))
+        print("")
+        return
+
+    print(_("The following libraries will be installed because they are missing :"))
+    print(" ".join(missing))
+    print("")
+
+    result = package_manager.install(missing)
+    if result.returncode != 0:
+        print(_("DEBUG : There was an error installing the missing libraries :"))
+        print(result.stdout)
+        print("")
+        exit(3)
+
+
 
 
 
@@ -192,7 +214,7 @@ def libraries_installation (lib_to_install):
     #-----------------------------------------------------------------------------------------------------
 
     # INSTALLING THE MISSING LIBRARIES
-    package_install = subprocess.run(f"dnf install -y {lib_to_install}",shell=True, capture_output=True, text=True)
+    package_install = package_manager.install(lib_to_install)
 
     # PRINTING IN THE TERMINAL THE RESULT DEPENDING ON IF THERE ARE ERRORS OR NOT
     if package_install.returncode == 0 : 
@@ -229,7 +251,6 @@ os_version = utility.check_fedora_version()
 library_list = get_libraries_list()
 
 
-
 # CHECKING IF IS INSTALLED FEDORA 40
 if os_version.find("40") != -1 :
 
@@ -254,7 +275,9 @@ elif os_version.find("Rawhide") != -1 :
     # EXECUTION OF THE FUNCTION THAT INSTALL THE MISSING DEPENDENCIES
     check_dependencies_41(library_list)
 
-
+else:
+    # Not a Fedora-like distro -> assume Debian-like
+    check_dependencies_deb(library_list)
 
 
 

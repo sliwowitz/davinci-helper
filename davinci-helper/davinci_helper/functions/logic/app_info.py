@@ -5,7 +5,7 @@
 #
 
 #-----------------------------------------------------------------------------------------------------
-
+from .data_path import get_data_directory
 
 # APP NAME
 app_name = "DaVinci Helper"
@@ -35,7 +35,7 @@ app_license = "gpl-3.0"
 app_issue_url = "https://github.com/H3rz3n/davinci-helper/issues"
 
 # APP COPYRIGHT
-with open(f"/usr/share/davinci-helper/data/LICENSE", 'r', encoding='utf-8') as file :
+with open(f"{get_data_directory()}/data/LICENSE", 'r', encoding='utf-8') as file :
 
     # READING THE COPYRIGHT FILE
     app_copyright = file.read()

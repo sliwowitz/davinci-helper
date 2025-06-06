@@ -15,10 +15,8 @@
 # STANDARD MODULES IMPORT
 import sys, gi, os, subprocess, threading, locale, gettext
 
-#-----------------------------------------------------------------------------------------------------
-
-# DEFINING TRANSLATE FILES PATH
-locale_path = os.path.join("/usr/share/davinci-helper/locale")
+# NOT STANDARD MODULES IMPORT
+from data_path import *
 
 #-----------------------------------------------------------------------------------------------------
 

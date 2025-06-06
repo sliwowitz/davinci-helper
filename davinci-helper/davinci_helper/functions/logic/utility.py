@@ -9,16 +9,10 @@
 # STANDARD MODULES IMPORT
 import sys, os, subprocess, threading, gettext, locale, re
 
-#-----------------------------------------------------------------------------------------------------
 
-# DEFINING UI FILES PATH
-ui_path = os.path.join("/usr/share/davinci-helper/data/ui")
-
-# DEFINING ICON FILES PATH
-icon_path = os.path.join("/usr/share/davinci-helper/data/icons")
-
-# DEFINING TRANSLATE FILES PATH
-locale_path = os.path.join("/usr/share/davinci-helper/locale")
+# NOT STANDARD MODULES IMPORT
+from davinci_helper.package_manager import package_manager, AptManager
+from data_path import *
 
 #-----------------------------------------------------------------------------------------------------
 
@@ -128,6 +122,13 @@ def check_fedora_version ():
             # PRINT THE FEDORA VERSION
             print(_("You are using a supported OS version : {os_version_placeholder}").format(os_version_placeholder = os_version))
 
+        elif os_info.stdout.find("Ubuntu 24.04") != -1 :
+
+            # SETTING THE FOUND OS VERSION
+            os_version = "Ubuntu 24.04"
+
+            # PRINT THE FEDORA VERSION
+            print(_("You are using a partially supported OS version : {os_version_placeholder}").format(os_version_placeholder = os_version))
 
         
 
@@ -151,6 +152,9 @@ def check_fedora_version ():
 
 # FUNCTION THAT ADDS THE RPM FUSION REPOSITORY
 def add_repository():
+
+    if isinstance(package_manager, AptManager):
+        return
 
     #-----------------------------------------------------------------------------------------------------
 

@@ -8,14 +8,8 @@
 # STANDARD MODULES IMPORT
 import sys, os, subprocess, threading, gettext, locale, pathlib
 
-#-----------------------------------------------------------------------------------------------------
-
-# DEFINING TRANSLATE FILES PATH
-locale_path = os.path.join("/usr/share/davinci-helper/locale")
-
-# DEFINING SETTINGS FILES PATH
-home_dir = os.path.expanduser("~")
-settings_path = os.path.join(f"{home_dir}/.config")
+# NOT STANDARD MODULES IMPORT
+from ..logic.data_path import *
 
 #-----------------------------------------------------------------------------------------------------
 
@@ -77,7 +71,7 @@ def install_default_settings ():
     create_folder = subprocess.run(f"mkdir -p '{settings_path}/davinci_helper'",shell=True, text=True)
 
     # COPYING THE DEFAULT SETTINGS
-    copy_default_settings =  subprocess.run(f"cp /usr/share/davinci-helper/data/settings/davinci_helper_settings {settings_path}/davinci_helper/",shell=True, text=True)
+    copy_default_settings =  subprocess.run(f"cp {get_data_directory()}/data/settings/davinci_helper_settings {settings_path}/davinci_helper/",shell=True, text=True)
 
     #-----------------------------------------------------------------------------------------------------
 
@@ -94,7 +88,7 @@ def restore_settings() :
     delete_user_settings = subprocess.run(f"rm {settings_path}/davinci_helper/davinci_helper_settings",shell=True, text=True)
 
     # COPYING THE DEFAULT SETTINGS
-    copy_default_settings =  subprocess.run(f"cp /usr/share/davinci-helper/data/settings/davinci_helper_settings {settings_path}/davinci_helper/",shell=True, text=True)
+    copy_default_settings =  subprocess.run(f"cp {get_data_directory()}/data/settings/davinci_helper_settings {settings_path}/davinci_helper/",shell=True, text=True)
 
     #-----------------------------------------------------------------------------------------------------
 

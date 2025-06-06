@@ -22,24 +22,7 @@ from gi.repository import Gtk, Adw, Gdk, Pango, Gio, GLib
 
 # NOT STANDARD MODULES IMPORT
 from .loading_gui import loading_class
-
-#-----------------------------------------------------------------------------------------------------
-
-# DEFINING CSS FILES PATH
-css_path = os.path.join("/usr/share/davinci-helper/data/css")
-
-# DEFINING UI FILES PATH
-ui_path = os.path.join("/usr/share/davinci-helper/data/ui")
-
-# DEFINING ICON FILES PATH
-icon_path = os.path.join("/usr/share/davinci-helper/data/icons")
-
-# DEFINING TRANSLATE FILES PATH
-locale_path = os.path.join("/usr/share/davinci-helper/locale")
-
-# DEFINING SETTINGS FILES PATH
-home_dir = os.path.expanduser("~")
-settings_path = os.path.join(f"{home_dir}/.config")
+from ..logic.data_path import *
 
 #-----------------------------------------------------------------------------------------------------
 

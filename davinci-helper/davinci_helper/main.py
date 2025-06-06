@@ -35,23 +35,7 @@ from .functions.gui.ffmpeg_install_gui import ffmpeg_install_class
 from .functions.logic.setting_management import check_settings_existence, restore_settings
 from .functions.logic.check_update import check_update
 
-#-----------------------------------------------------------------------------------------------------
-
-# DEFINING CSS FILES PATH
-css_path = os.path.join("/usr/share/davinci-helper/data/css")
-
-# DEFINING UI FILES PATH
-ui_path = os.path.join("/usr/share/davinci-helper/data/ui")
-
-# DEFINING ICON FILES PATH
-icon_path = os.path.join("/usr/share/davinci-helper/data/icons")
-
-# DEFINING TRANSLATE FILES PATH
-locale_path = os.path.join("/usr/share/davinci-helper/locale")
-
-# DEFINING SETTINGS FILES PATH
-home_dir = os.path.expanduser("~")
-settings_path = os.path.join(f"{home_dir}/.config")
+from .functions.logic.data_path import *
 
 #-----------------------------------------------------------------------------------------------------
 

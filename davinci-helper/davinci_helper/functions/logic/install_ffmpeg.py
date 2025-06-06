@@ -20,15 +20,8 @@ import sys, os, subprocess, threading, gettext, locale
 
 # NOT STANDARD MODULES IMPORT
 import davinci_helper.functions.logic.utility as utility
-
-#-----------------------------------------------------------------------------------------------------
-
-# DEFINING TRANSLATE FILES PATH
-locale_path = os.path.join("/usr/share/davinci-helper/locale")
-
-# DEFINING SETTINGS FILES PATH
-home_dir = os.path.expanduser("~")
-settings_path = os.path.join(f"{home_dir}/.config")
+from davinci_helper.package_manager import package_manager, AptManager
+from data_path import *
 
 #-----------------------------------------------------------------------------------------------------
 
@@ -48,22 +41,34 @@ _ = gettext.gettext
 
 
 
-
 # FUNCTION THAT WILL CHECK IF FFMPEG IS ALREADY INSTALLED ON THE SYSTEM
 def check_ffmpeg_presence ():
+    """
+    Fedora:
+        returns "Lite"  (ffmpeg-free)
+                 "Full" (ffmpeg from RPM Fusion)
+                 "None"
+    Debian/Ubuntu:
+        returns "Full"  (ffmpeg)
+                 "None"
+    """
 
     #-----------------------------------------------------------------------------------------------------
 
     # ACQUIRING IF FFMPEG IS ALREADY INSTALLED
-    check_ffmpeg = subprocess.run("dnf list --installed | grep ffmpeg", shell=True, capture_output=True, text=True )
+    proc = package_manager.list_installed_libs()
+    out = proc.stdout
+
+    if isinstance(package_manager, AptManager):
+        return "Full" if " ffmpeg " in out or out.startswith("ii  ffmpeg") else "None"
 
     # CHECKING IF FFMPEG IS ALREADY INSTALLED
-    if check_ffmpeg.stdout.find("ffmpeg-free") != -1 :
+    if "ffmpeg-free" in out :
 
         # RETURNING THE PRESENCE VALUE
         return "Lite"
 
-    elif check_ffmpeg.stdout.find("ffmpeg") != -1 : 
+    elif "ffmpeg" in out :
 
         # RETURNING THE PRESENCE VALUE
         return "Full"
@@ -83,7 +88,7 @@ def install_ffmpeg ():
     #-----------------------------------------------------------------------------------------------------
 
     # INSTALLING FFMPEG FROM RPM FUSION
-    ffmpeg_install = subprocess.run("dnf install -y ffmpeg", shell=True, capture_output=True, text=True)
+    ffmpeg_install = package_manager.install(["ffmpeg"])
 
     # CHECKING IF THERE WERE ERRORS
     if ffmpeg_install.returncode != 0 :

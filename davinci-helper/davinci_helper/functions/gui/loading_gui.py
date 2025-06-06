@@ -9,7 +9,10 @@
 
 # IMPORTAZIONE DEI MODULI STANDARD
 # STANDARD MODULE IMPORT
-import sys, gi, os, threading, gettext, locale, subprocess
+import gi, os, threading, gettext, locale, subprocess
+
+# NOT STANDARD MODULES IMPORT
+from ..logic.data_path import *
 
 # RICHIESTA DELLE VERSIONI DI GTK ED ADWAITA
 # REQUESTING THE CHOOSEN VERSION OF GTK AND ADWAITA
@@ -19,24 +22,6 @@ gi.require_version('Adw', '1')
 # IMPORTO I MODULI NECESSARI
 # IMPORTING THE NECESSARY MODULES
 from gi.repository import Gtk, Adw, Gdk, Pango, Gio, GLib
-
-#-----------------------------------------------------------------------------------------------------
-
-# DEFINING CSS FILES PATH
-css_path = os.path.join("/usr/share/davinci-helper/data/css")
-
-# DEFINING UI FILES PATH
-ui_path = os.path.join("/usr/share/davinci-helper/data/ui")
-
-# DEFINING ICON FILES PATH
-icon_path = os.path.join("/usr/share/davinci-helper/data/icons")
-
-# DEFINING TRANSLATE FILES PATH
-locale_path = os.path.join("/usr/share/davinci-helper/locale")
-
-# DEFINING SETTINGS FILES PATH
-home_dir = os.path.expanduser("~")
-settings_path = os.path.join(f"{home_dir}/.config/davinci_helper")
 
 #-----------------------------------------------------------------------------------------------------
 
